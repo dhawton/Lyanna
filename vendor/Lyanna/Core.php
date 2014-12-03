@@ -6,11 +6,12 @@ namespace Lyanna;
 
 class Core extends Database\awdb
 {
-    public $__databaseUser;
-    public $__databasePass;
-    public $__databaseServer;
-    public $__databaseName;
-    private $__database = false;
+    protected $instanceClasses = array();
+    protected $instances = array();
+    protected $modules = array(
+        'db' => '\Lyanna\Database',
+        'orm' => '\Lyanna\ORM'
+    );
     private $core;
     public static $ref;
     private $globals = array();
@@ -24,6 +25,19 @@ class Core extends Database\awdb
     {
         if ($this->globals[$key] == null && $key == "user") throw new \Exception("User requested but is null");
         return $this->globals[$key];
+    }
+
+    public function __get($name) {
+        if (isset($this->instances[$name]))
+            return $this->instances[$name];
+
+        if (isset($this->instanceClasses[$name]))
+            return $this->instances[$name] = new $this->instanceClasses[$name]($this);
+
+        if (isset($this->modules[$name]))
+            return $this->instances[$name] = new $this->modules[$name]($this);
+
+        throw new \Exception("Property {$name} not found on ".get_class($this));
     }
 
     public function __construct()

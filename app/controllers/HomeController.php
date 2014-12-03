@@ -1,6 +1,5 @@
 <?php
 use \Lyanna\View\View;
-use \vattrain\Auth\Auth;
 
 class HomeController
 {
