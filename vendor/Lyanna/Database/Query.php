@@ -188,7 +188,7 @@ abstract class Query
             return array('logic' => 'and', 'conditions' => $conditions);
         }
 
-        if ((is_string($p[0]) || $p[0] instanceof \Lyanna\Database\Expression) && isset($p[1])) {
+        if ((is_string($p[0]) || $p[0] instanceof Expression) && isset($p[1])) {
             if (is_string($p[0]) && strpos($p[0], '.') === false)
                 $p[0] = $this->lastAlias() . '.' . $p[0];
 
