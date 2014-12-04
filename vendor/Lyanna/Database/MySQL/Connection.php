@@ -85,6 +85,6 @@ class Connection
 
     public function query($type)
     {
-        $this->app->db->queryDriver("MySQL", $this, $type);
+        $this->app->db->queryDriver("mysql", $this, $type);
     }
 } 
