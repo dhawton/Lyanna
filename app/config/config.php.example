@@ -3,7 +3,8 @@ return [
     'app' => array(
         'debug' => true,
         'hash' => 'sha512',
-        'URL' => 'dev.zjx'
+        'URL' => 'dev.zjx',
+        'namespace' => 'ZJX'
     ),
     'db' => array(
         'enabled' => true,
