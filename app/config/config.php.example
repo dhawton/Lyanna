@@ -3,15 +3,14 @@ return [
     'app' => array(
         'debug' => true,
         'hash' => 'sha512',
-        'URL' => 'dev.zjx',
-        'namespace' => 'ZJX'
+        'URL' => 'danielhawton.com',
+        'namespace' => 'DanielHawton'
     ),
     'db' => array(
         'enabled' => true,
         'server' => '127.0.0.1',
-        'db' => 'vattrain',
-        'user' => 'vattrain',
-        'pass' => 'icaspw'
+        'db' => 'database',
+        'user' => 'user',
+        'pass' => 'password'
     ),
-    'URL' => 'dev.zjx'
 ];
