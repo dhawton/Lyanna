@@ -113,6 +113,4 @@ class Result
         $data = $this->_dbresult->valid() ? ((array)$this->_dbresult->current()) : null;
         return $this->buildModel($data);
     }
-
-
-} 
+}

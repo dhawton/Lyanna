@@ -15,3 +15,11 @@ function array_get($array, $key, $default = null)
 
     return $array;
 }
+
+function arr($array, $key, $def)
+{
+    if (isset($array[$key]))
+        return $array[$key];
+
+    return false;
+}
