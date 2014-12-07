@@ -69,7 +69,9 @@
     if (\Lyanna\Config::get('app.debug')==true && isset($ex)) {
         ?>
         <br>
+        <pre>
         <b>Exception:</b> <?=$ex->getMessage();?><br>
+        </pre>
         <br>
         <pre>
         <?=$ex->getTraceAsString();?>
