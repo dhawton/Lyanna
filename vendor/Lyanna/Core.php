@@ -4,7 +4,7 @@
 namespace Lyanna;
 
 
-class Core extends Database\awdb
+class Core
 {
     protected $instanceClasses = array();
     protected $instances = array();

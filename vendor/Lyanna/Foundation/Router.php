@@ -15,7 +15,7 @@ class Router
         if (isset($parts[1])) { $ret['method'] = $parts[1]; }
         else {$ret['method'] = ""; }
 
-        if (preg_match('/^(.+)\.' . Config::get('app.URL') . '$/', $servername, $match)) {
+        if (preg_match('/^([^w]+)\.' . Config::get('app.URL') . '$/', $servername, $match)) {
             $ret['subdomain'] = str_replace('.', DIRECTORY_SEPARATOR, $match);
         } else { $ret['subdomain'] = ""; }
 

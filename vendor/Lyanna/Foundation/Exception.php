@@ -1,6 +1,8 @@
 <?php
 namespace Lyanna\Foundation;
 
+use Lyanna\Config;
+
 class Exception {
     public static function register()
     {
@@ -22,7 +24,7 @@ class Exception {
     }
     public static function throwWarning($message)
     {
-        if(\lyanna\Config::get('app.debug') == true)
+        if(Config::get('app.debug') == true)
             if (file_exists($path = __APP__.DIRECTORY_SEPARATOR."resources".DIRECTORY_SEPARATOR."warning.php"))
                 include($path);
     }
