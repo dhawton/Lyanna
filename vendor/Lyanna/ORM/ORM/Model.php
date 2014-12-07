@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Lyanna\ORM\Extension;
+namespace Lyanna\ORM;
 use Lyanna\Config;
 
 class Model
@@ -222,11 +222,37 @@ class Model
     {
         return $this->_row;
     }
+    public function columns()
+    {
+        $cache = &$this->app->orm->columnCache;
+
+        if (!isset($cache[$this->table]))
+            $cache[$this->table] = $this->conn->listColumns($this->table);
+        return $cache[$this->table];
+    }
     public function countAll()
     {
         $query = clone $this->query;
         $query->type('count');
         return $query->execute();
+    }
+    public function delete()
+    {
+        if (!$this->loaded())
+            throw new \Exception("Cannot delete an item not yet selected from database");
+
+        $this->conn->query('delete')
+            ->table($this->table)
+            ->where($this->idField, $this->_row[$this->idField])
+            ->execute();
+        $this->cached = array();
+    }
+    public function deleteAll()
+    {
+        $query = clone $this->query;
+        $query->type('delete');
+        $query->execute();
+        return $this;
     }
     public function find()
     {
@@ -241,6 +267,21 @@ class Model
         return $this->app->orm->result($this->modelName, $this->query->execute(), $paths);
     }
     public function get($property) {}
+    public function id()
+    {
+        if ($this->loaded())
+            return $this->_row[$this->idField];
+
+        return null;
+    }
+    public function initColumns($defaults = array(), $defaultValue = null)
+    {
+        if (!$this->loaded())
+            foreach ($this->columns() as $column)
+                $this->$column = isset($defaults[$column]) ? $defaults[$column] : $defaultValue;
+
+        return $this;
+    }
     public function loaded()
     {
         return $this->_loaded;
@@ -343,5 +384,42 @@ class Model
             $model->save();
         }
         $this->cached = array();
+    }
+    public function save()
+    {
+        if ($this->loaded())
+            $query = $this->conn->query('update')
+                ->table($this->table)
+                ->where($this->idField, $this->_row[$this->idField]);
+        else
+            $query = $this->conn->query('insert')
+                ->table($this->table);
+
+        $query->data($this->_row);
+        $query->execute();
+
+        if ($this->loaded())
+            $id = $this->_row[$this->idField];
+        else
+            $id = $this->conn->insertId();
+
+        $row = (array)$this->conn->query('select')
+            ->table($this->table)
+            ->where($this->idField, $id)->execute()->current();
+        $this->values($row, true);
+        return $this;
+    }
+    public function values($row, $setLoaded = true)
+    {
+        $this->_row = array_merge($this->_row, $row);
+        if ($setLoaded)
+            $this->_loaded = true;
+        $this->cached = array();
+        return $this;
+    }
+    public function with()
+    {
+        $this->_with = func_get_args();
+        return $this;
     }
 }
