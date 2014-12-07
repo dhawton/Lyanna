@@ -10,12 +10,12 @@
             color: #313131;
         }
         .box {
-            margin-top: -150px;
-            margin-left: -150px;
             height: 300px;
             width: 300px;
             top: 50%;
             left: 50%;
+            margin-top: -150px;
+            margin-left: -150px;
         }
         a,a:visited,a:hover {
             color: blue;
