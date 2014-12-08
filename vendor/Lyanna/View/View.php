@@ -1,5 +1,5 @@
 <?php
-namespace Lyanna\View;
+namespace Lyanna;
 
 class View
 {
