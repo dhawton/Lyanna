@@ -65,6 +65,7 @@
 <body>
 <div id="sf-resetcontent" class="sf-reset">
     <h1>Whoops, looks like something went wrong.</h1>
+</div>
     <?php
     if (\Lyanna\Config::get('app.debug')==true && isset($ex)) {
         ?>
@@ -79,6 +80,5 @@
     <?php
     }
     ?>
-</div>
 </body>
 </html>

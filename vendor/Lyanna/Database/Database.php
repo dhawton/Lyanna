@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Lyanna;
+namespace Lyanna\Database;
 use Lyanna\Config;
 
 class Database
@@ -33,7 +33,7 @@ class Database
 
     public function expression($value, $params = array())
     {
-        return new Database\Expression($value, $params);
+        return new Expression($value, $params);
     }
 
     public function get($config = self::DEFAULT_CONNECTION)

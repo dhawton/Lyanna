@@ -9,11 +9,20 @@ class Router
     {
         $ret = array();
         if ($url[0] == '/') $url = substr($url, 1);
-        $parts = explode("/", $url, 2);
+        $parts = explode("/", $url, 3);
         if (isset($parts[0])) { $ret['controller'] = $parts[0]; }
         else { $ret['controller'] = ""; }
         if (isset($parts[1])) { $ret['method'] = $parts[1]; }
         else {$ret['method'] = ""; }
+        if (isset($parts[2])) {
+            if (strpos($parts[2], '/')) {
+                $ret['parameters'] = explode('/', $parts[2]);
+            } else {
+                $ret['parameters'] = $parts[2];
+            }
+        } else {
+            $ret['parameters'] = null;
+        }
 
         if (preg_match('/^([^w]+)\.' . Config::get('app.URL') . '$/', $servername, $match)) {
             $ret['subdomain'] = str_replace('.', DIRECTORY_SEPARATOR, $match);
@@ -45,8 +54,8 @@ class Router
             call_user_func($controller."::accessCheck", $parts);
 
         if (!is_callable($controller."::".$method))
-            Exception::throwHttpError(404,"Not found");
+            Exception::throwHttpError(404,"Not found $controller::$method");
 
-        call_user_func($controller."::".$method);
+        call_user_func($controller."::".$method, $parts['parameters']);
     }
 }

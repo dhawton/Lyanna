@@ -1,15 +1,45 @@
 <?php
 return [
     'app' => array(
-        'debug' => true,
+        'debug' => false,
         'hash' => 'sha512',
         'URL' => 'danielhawton.com',
         'namespace' => 'DanielHawton'
     ),
+    'bundles' => array (
+        'js' => array(
+            'main' => array(
+                'assets/js/jquery.min.js',
+                'assets/js/jquery.magnific-popup.min.js',
+                'assets/js/bootstrap.min.js',
+                'assets/js/placeholders.min.js',
+                'assets/js/owl.carousel.min.js',
+                'assets/js/site.js'
+            ),
+            'home' => array (
+                'assets/js/jquery.countTo.js',
+                'assets/js/jquery.themepunch.revolutionslider.min.js',
+                'assets/js/jquery.themepunch.tools.min.js',
+                'assets/js/waypoints.min.js',
+                'assets/js/home.js'
+            )
+        ),
+        'css' => array(
+            'main' => array(
+                'assets/css/bootstrap.min.css',
+                'assets/css/fontawesome.min.css',
+                'assets/css/magnific-popup.min.css',
+                'assets/css/owl.carousel.min.css',
+                'assets/css/theme.css',
+                'assets/css/revolutionslider.min.css'
+            )
+        ),
+        'gzip' => true
+    ),
     'db' => array(
-        'default' => array(
+        'default' => array (
             'driver' => 'PDO',
-            'connection' => 'mysql:host=server;dbname=database',
+            'connection' => 'mysql:host=localhost;dbname=database',
             'user' => 'username',
             'pass' => 'password'
         )
