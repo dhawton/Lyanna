@@ -1,15 +1,17 @@
 <?php
 return [
     'app' => array(
-        'debug' => false,
+        'debug' => true,
         'hash' => 'sha512',
         'URL' => 'danielhawton.com',
-        'namespace' => 'DanielHawton'
+        'namespace' => 'ZJX',
+        'uploads' => '/home/danielhawton/uploads/'
     ),
     'bundles' => array (
         'js' => array(
             'main' => array(
                 'assets/js/jquery.min.js',
+                'assets/js/jquery.tooltipster.min.js',
                 'assets/js/jquery.magnific-popup.min.js',
                 'assets/js/bootstrap.min.js',
                 'assets/js/placeholders.min.js',
@@ -39,9 +41,16 @@ return [
     'db' => array(
         'default' => array (
             'driver' => 'PDO',
-            'connection' => 'mysql:host=localhost;dbname=database',
+            'connection' => 'mysql:host=localhost;dbname=databasename',
             'user' => 'username',
             'pass' => 'password'
         )
     ),
+    'routes' => array (
+        'Events' => array (
+            '/Events(/<id>)',
+            array('controller'=>'Events', 'action'=>'getIndex'),
+            'GET'
+        )
+    )
 ];
