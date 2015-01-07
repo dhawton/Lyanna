@@ -128,6 +128,15 @@ abstract class Query
         return 'a' . $this->_alias;
     }
 
+    public function select()
+    {
+        $me = $this->query('select');
+        if (func_num_args() >= 1)
+            return $me->fields(func_get_args());
+
+        return $me;
+    }
+
     public function orderBy($column, $direction = 'ASC')
     {
         $direction = strtoupper($direction);
@@ -135,6 +144,11 @@ abstract class Query
             throw new \Exception("Invalid sorting direction $direction passed");
         $this->_orderBy[] = array($column, $dir);
         return $this;
+    }
+
+    public function from($table = null, $alias = null)
+    {
+        return $this->table($table, $alias);
     }
 
     public function table($table = null, $alias = null)
@@ -161,6 +175,8 @@ abstract class Query
         $p = func_get_args();
         $condition = $this->getConditionPart($p);
         $this->_conditions = array_merge($this->_conditions, array($condition));
+
+        return $this;
     }
 
     public abstract function query();
@@ -168,33 +184,40 @@ abstract class Query
 
     private function getConditionPart($p)
     {
-        if (is_string($p[0]) && (strtolower($p[0]) == 'or' || strtolower($p[0]) == 'and') && isset($p[1]) && is_array($p[1])) {
-            $condition = $this->getConditionPart($p[1]);
-            $condition['logic'] = strtolower($p[0]);
-            return $condition;
+        if (is_string($p[0]) && (strtolower($p[0]) == 'or' || strtolower($p[0]) == 'and') && isset($p[1]) && is_array($p[1]))
+        {
+            $cond = $this->getConditionPart($p[1]);
+            $cond['logic'] = strtolower($p[0]);
+            return $cond;
         }
 
-        if (is_array($p[0])) {
+        if (is_array($p[0]))
+        {
             if (count($p) == 1)
+            {
                 return $this->getConditionPart($p[0]);
-
-            $conditions = array();
+            }
+            $conds = array();
             foreach ($p as $q)
-                $conditions[] = $this->getConditionPart($q);
-
-            if (count($conditions) == 1)
-                return $conditions;
-
-            return array('logic' => 'and', 'conditions' => $conditions);
+            {
+                $conds[] = $this->getConditionPart($q);
+            }
+            if (count($conds) == 1)
+            {
+                return $conds;
+            }
+            return array('logic' => 'and', 'conditions' => $conds);
         }
 
-        if ((is_string($p[0]) || $p[0] instanceof Expression) && isset($p[1])) {
+        if ((is_string($p[0]) || $p[0] instanceof Expression) && isset($p[1]))
+        {
             if (is_string($p[0]) && strpos($p[0], '.') === false)
-                $p[0] = $this->lastAlias() . '.' . $p[0];
-
+            {
+                $p[0] = $this->lastAlias().'.'.$p[0];
+            }
             return array(
                 'logic' => 'and',
-                'conditions' => array (
+                'conditions' => array(
                     'field' => $p[0],
                     'operator' => isset($p[2]) ? $p[1] : '=',
                     'value' => isset($p[2]) ? $p[2] : $p[1]
@@ -202,6 +225,6 @@ abstract class Query
             );
         }
 
-        throw new \Exception("Incorrect conditional statement passed.");
+        throw new \Exception('Incorrect conditional statement passed');
     }
 }

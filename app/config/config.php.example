@@ -4,13 +4,53 @@ return [
         'debug' => true,
         'hash' => 'sha512',
         'URL' => 'danielhawton.com',
-        'namespace' => 'DanielHawton'
+        'namespace' => 'ZJX',
+        'uploads' => '/home/danielhawton/uploads/'
+    ),
+    'bundles' => array (
+        'js' => array(
+            'main' => array(
+                'assets/js/jquery.min.js',
+                'assets/js/jquery.tooltipster.min.js',
+                'assets/js/jquery.magnific-popup.min.js',
+                'assets/js/bootstrap.min.js',
+                'assets/js/placeholders.min.js',
+                'assets/js/owl.carousel.min.js',
+                'assets/js/site.js'
+            ),
+            'home' => array (
+                'assets/js/jquery.countTo.js',
+                'assets/js/jquery.themepunch.revolutionslider.min.js',
+                'assets/js/jquery.themepunch.tools.min.js',
+                'assets/js/waypoints.min.js',
+                'assets/js/home.js'
+            )
+        ),
+        'css' => array(
+            'main' => array(
+                'assets/css/bootstrap.min.css',
+                'assets/css/fontawesome.min.css',
+                'assets/css/magnific-popup.min.css',
+                'assets/css/owl.carousel.min.css',
+                'assets/css/theme.css',
+                'assets/css/revolutionslider.min.css'
+            )
+        ),
+        'gzip' => true
     ),
     'db' => array(
-        'enabled' => true,
-        'server' => '127.0.0.1',
-        'db' => 'database',
-        'user' => 'user',
-        'pass' => 'password'
+        'default' => array (
+            'driver' => 'PDO',
+            'connection' => 'mysql:host=localhost;dbname=databasename',
+            'user' => 'username',
+            'pass' => 'password'
+        )
     ),
+    'routes' => array (
+        'Events' => array (
+            '/Events(/<id>)',
+            array('controller'=>'Events', 'action'=>'getIndex'),
+            'GET'
+        )
+    )
 ];

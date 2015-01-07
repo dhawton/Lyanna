@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-namespace Lyanna;
-
+namespace Lyanna\ORM;
 
 class ORM
 {
@@ -37,7 +36,8 @@ class ORM
         $name = explode("_", $name);
         $name = array_map('ucfirst', $name);
         $name = implode("\\", $name);
-        $model = "\\" . Config::get('app.namespace') . "\\Models";
+        $model = "\\" . Config::get('app.namespace') . "\\Models" . $name;
+        $model = new $model($this->app);
 
         if ($id != null) {
             $model = $model->where($model->idField, $id)->find();
@@ -47,6 +47,6 @@ class ORM
     }
 
     public function result($model, $dbresult, $with = array()) {
-        return new \Lyanna\ORM\Result($this->app, $model, $dbresult, $with);
+        return new Result($this->app, $model, $dbresult, $with);
     }
 } 

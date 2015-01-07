@@ -15,29 +15,16 @@
  * limitations under the License.
  */
 
-namespace Lyanna\Database\PDO;
+namespace Lyanna\ORM;
 
-class Result
-    extends \Lyanna\Database\Result
+abstract class Extension
 {
-    function __construct($statement)
-    {
-        $this->_result = $statement;
-    }
+    protected $app;
+    protected $model;
 
-    public function next()
+    function __construct($app, $model)
     {
-        $this->checkFetched();
-        $this->_row = $this->_result->fetchObject();
-        if ($this->_row)
-            $this->_position++;
-        else
-            $this->_result->closeCursor();
-    }
-
-    public function rewind()
-    {
-        if ($this->_position > 0)
-            throw new \Exception('PDO statement cannot be rewound for unbuffered queries');
+        $this->app = $app;
+        $this->model = $model;
     }
 } 

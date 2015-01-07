@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Lyanna;
+namespace Lyanna\Database;
 use Lyanna\Config;
 
 class Database
@@ -33,7 +33,7 @@ class Database
 
     public function expression($value, $params = array())
     {
-        return new Database\Expression($value, $params);
+        return new Expression($value, $params);
     }
 
     public function get($config = self::DEFAULT_CONNECTION)
@@ -59,6 +59,14 @@ class Database
     public function query($type, $config = self::DEFAULT_CONNECTION)
     {
         return $this->get($config)->query($type);
+    }
+
+    public function select()
+    {
+        $q = $this->query('select');
+        if (func_num_args())
+            $q = $q->fields(func_get_args());
+        return $q;
     }
 
     public function queryDriver($driver, $db, $type)

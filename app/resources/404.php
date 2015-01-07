@@ -64,8 +64,7 @@
 </head>
 <body>
 <div id="sf-resetcontent" class="sf-reset">
-    <h1>Whoops, looks like something went wrong.</h1>
-</div>
+    <h1>404 - Not found. <?=$message?></h1>
     <?php
     if (\Lyanna\Config::get('app.debug')==true && isset($ex)) {
         ?>
@@ -80,5 +79,6 @@
     <?php
     }
     ?>
+</div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <?php
 session_name("lyanna_session");
 session_start();
+ob_start("showpage");
 
 // Load classless helper functions
 require_once(__VENDOR__ . 'Lyanna' . DIRECTORY_SEPARATOR . 'Support' . DIRECTORY_SEPARATOR . 'helpers.php');
@@ -24,22 +25,22 @@ Config::load();
 $app = Core::register();
 $pdo = null;
 $db = null;
+$data = array();
 
 function start()
 {
     global $app, $db, $pdo;
-
-/*    if (Config::get('app.db.enabled') == true) {
-        $dbname = Config::get('app.db.db');
-        $user = Config::get('app.db.user');
-        $pass = Config::get('app.db.pass');
-        $pdo = new PDO("mysql:dbname=$dbname", $user, $pass);
-        $db = Database($pdo);
-    }*/
 
     if (file_exists($path = __APP__ . "environment" . DIRECTORY_SEPARATOR . "start.php")) {
         require_once($path);
     }
 
     Router::handleURL(Request::getEnv("SERVER_NAME"), Request::getEnv("REQUEST_URI"));
+}
+
+function showpage($buffer)
+{
+    global $app;
+
+    return \Lyanna\Foundation\MinifyHTML::minify($buffer);
 }

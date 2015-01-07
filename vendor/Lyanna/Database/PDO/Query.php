@@ -27,7 +27,7 @@ class Query
 
     function __construct($db, $type)
     {
-        parent::__construct($db, strtolower($type));
+        parent::__construct($db, $type);
         $this->_dbType = $this->_db->dbType;
         $this->_quote = ($this->_dbType == 'mysql' ? '`' : '"');
     }
@@ -105,30 +105,28 @@ class Query
         return "?";
     }
 
-    public function getConditionQuery($condition, &$params, $skipFirstOperator, $valueIsField = false)
+    public function getConditionQuery($p, &$params, $skipFirstOperator, $valueIsField = false)
     {
-        if (isset($condition['field'])) {
+        if (isset($p['field'])) {
             if ($valueIsField)
-                $param = $this->escapeField($condition['value']);
+                $param = $this->escapeField($p['value']);
             else
-                $param = $this->escapeValue($condition['value'], $params);
+                $param = $this->escapeValue($p['value'], $params);
 
-            return $this->escapeField($condition['field'] . " " . $condition['operator'] . " " . $param);
+            return $this->escapeField($p['field']).' '.$p['operator'].' '.$param;
         }
-
-        if (isset($condition['logic']))
-            return ($skipFirstOperator ? "" : strtoupper($condition['logic']) . ' ') .
-                $this->getConditionQuery($condition['conditions'], $params, false, $valueIsField);
+        if (isset($p['logic']))
+            return ($skipFirstOperator ? '' : strtoupper($p['logic']).' ')
+            . $this->getConditionQuery($p['conditions'], $params, false, $valueIsField);
 
         $conds = '';
-        $skip = $skipFirstOperator || (count($condition) > 1);
-        foreach ($condition as $x) {
-            $conds .= $this->getConditionQuery($x, $params, $skip, $valueIsField) . ' ';
+        $skip = $skipFirstOperator || (count($p) > 1);
+        foreach ($p as $q) {
+            $conds .= $this->getConditionQuery($q, $params, $skip, $valueIsField).' ';
             $skip = false;
         }
-
-        if (count($condition) > 1 && !$skipFirstOperator)
-            return "( $conds)";
+        if (count($p) > 1 && !$skipFirstOperator)
+            return "( ".$conds.")";
 
         return $conds;
     }
@@ -246,7 +244,7 @@ class Query
                     else
                         $first = false;
 
-                    $query .= $this->quote($key) . " = " . $this->escape_value($val, $params);
+                    $query .= $this->quote($key) . " = " . $this->escapeValue($val, $params);
                 }
                 $query .= " ";
             }
